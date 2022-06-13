@@ -120,9 +120,7 @@ Cypress.Commands.add(
     },
     (subject, value) => {
         cy.wrap(subject).should('be.visible');
-        cy.wrap(subject).clear();
-        cy.wrap(subject).clear(); // To make sure it's cleared
-        cy.wrap(subject).type(value).should('have.value', value);
+        cy.wrap(subject).type('{selectall}{backspace}{selectall}{backspace}'+value+'{enter}').should('have.value', value);
     }
 );
 
@@ -243,8 +241,7 @@ Cypress.Commands.add(
         // type in each value and select it
         for (let i = 0; i < values.length; i += 1) {
             cy.get(`${subject.selector} .sw-select-selection-list__input`)
-                .clear()
-                .type(values[i])
+                .type('{selectall}{backspace}{selectall}{backspace}'+values[i]+'{enter}')
                 .should(
                     "have.value",
                     values[i]
@@ -303,8 +300,7 @@ Cypress.Commands.add(
         // type in the search term if available
         if (value) {
             cy.get('.sw-select-result-list').should('exist');
-            cy.get(`${selector} ${inputCssSelector}`).clear();
-            cy.get(`${selector} ${inputCssSelector}`).type(value);
+            cy.get(`${selector} ${inputCssSelector}`).type('{selectall}{backspace}{selectall}{backspace}'+value+'{enter}');
             cy.get(`${selector} ${inputCssSelector}`).should(
                 'have.value',
                 value
@@ -940,8 +936,7 @@ Cypress.Commands.add(
         // type in each value and select it
         for (let i = 0; i < values.length; i += 1) {
             cy.get(`${subject.selector} .sw-select-selection-list__input`)
-                .clear()
-                .type(values[i])
+                type('{selectall}{backspace}{selectall}{backspace}'+values[i]+'{enter}')
                 .should(
                     'have.value',
                     values[i],
@@ -1238,8 +1233,8 @@ Cypress.Commands.add('setShippingMethod', (shippingMethod, gross, net) => {
         .type('Always valid (Default)');
     cy.get('.sw-select-result-list__content').contains('Always valid (Default)').should('be.visible').click();
     cy.get('.sw-settings-shipping-price-matrix').scrollIntoView();
-    cy.get('.sw-data-grid__cell--price-EUR .sw-field--small:nth-of-type(1) [type]').clear().type(gross);
-    cy.get('.sw-data-grid__cell--price-EUR .sw-field--small:nth-of-type(2) [type]').clear().type(net);
+    cy.get('.sw-data-grid__cell--price-EUR .sw-field--small:nth-of-type(1) [type]').type('{selectall}{backspace}{selectall}{backspace}'+gross+'{enter}');
+    cy.get('.sw-data-grid__cell--price-EUR .sw-field--small:nth-of-type(2) [type]').type('{selectall}{backspace}{selectall}{backspace}'+net+'{enter}');
     cy.get('.sw-settings-shipping-method-detail__save-action').should('be.visible').click();
     cy.wait('@set-shipping').its('response.statusCode').should('equal', 200);
 });
